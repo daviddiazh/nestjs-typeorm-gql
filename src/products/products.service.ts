@@ -45,6 +45,31 @@ export class ProductsService {
     }
   }
 
+  async findOneByTitleOrSlug (term: string) {
+    try {
+      let product: Product;
+      const queryBuilder = this.productRepository.createQueryBuilder();
+
+      product = await queryBuilder
+        .where(
+          'title= :title or slug= :slug', 
+          {
+            title: term,
+            slug: term,
+          }
+        )
+        .getOne();
+
+      if( !product ){
+        throw new NotFoundException(`Product with ${ term } not found`);
+      }
+
+      return product;
+    } catch (error) {
+      this.handleDBExceptions( error )
+    }
+  }
+
   async update(id: number, updateProductDto: UpdateProductDto) {
     return `This action updates a #${id} product`;
   }
@@ -55,6 +80,7 @@ export class ProductsService {
 
 
   private handleDBExceptions (error: any) {
+    // console.log(error)
 
     if( error.code === '23505' ) {
       throw new BadRequestException(error.detail)
