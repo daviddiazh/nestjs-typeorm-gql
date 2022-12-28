@@ -2,6 +2,30 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ProductEntity {
+  title: String
+  price: Int
+  description: String
+  slug: String
+  stock: Int
+  sizes: [String!]
+  gender: String
+}
+
 type Query {
-  hello: String!
+  helloWorld: String!
+}
+
+type Mutation {
+  createProduct(createProductDto: CreateProductInputDto!): ProductEntity!
+}
+
+input CreateProductInputDto {
+  title: String!
+  price: Int
+  description: String
+  slug: String
+  stock: Int
+  sizes: [String!]!
+  gender: String!
 }
