@@ -11,15 +11,24 @@ export class GraphQLResolver {
         private readonly productService: ProductsService,
     ){}
 
-    @Query( () => String, { name: 'helloWorld' } )
-    hello () {
-        return 'Hola mundo'
-    }
-
-
     @Mutation( () => ProductEntity, { name: 'createProduct' } )
     createProduct (@Args('createProductDto') createProductDto: CreateProductInputDto) {
         return this.productService.create( createProductDto );
+    }
+
+    @Query( () => [ ProductEntity ], { name: 'findAllProducts' })
+    findAllProducts () {
+        return this.productService.findAll();
+    }
+
+    @Query( () => ProductEntity, { name: 'findProductById' } )
+    findProductById (@Args('id') id: string) {
+        return this.productService.findOne( id )
+    }
+
+    @Query( () => ProductEntity, { name: 'findByTitleOrSlug' } )
+    findByTitleOrSlug (@Args('term') term: string) {
+        return this.productService.findOneByTitleOrSlug( term );
     }
 
 }
